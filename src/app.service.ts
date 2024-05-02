@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
+type Cat = { id: number; name: string };
+
 @Injectable()
 export class AppService {
-  private readonly cats: { id: number; name: string }[];
+  private readonly cats: Cat[];
 
   constructor() {
     this.cats = [
@@ -21,11 +23,11 @@ export class AppService {
     ];
   }
 
-  findOne(id: number): { id: number; name: string } {
+  findOne(id: number): Cat {
     return this.cats.find((cat) => cat.id === id);
   }
 
-  findAll(): string[] {
-    return this.cats.map((cat) => cat.name);
+  findAll(): Cat[] {
+    return this.cats;
   }
 }

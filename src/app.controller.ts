@@ -11,7 +11,7 @@ export class AppController {
   }
 
   @Get()
-  findAll(): string[] {
+  findAll() {
     return this.appService.findAll();
   }
 }
