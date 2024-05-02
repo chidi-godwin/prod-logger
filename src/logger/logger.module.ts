@@ -45,7 +45,7 @@ import { ContextModule } from './context/context.module';
       useFactory: (configService: ConfigService) => {
         const transports = [];
         const environment = configService.get<string>('NODE_ENV') ?? 'dev';
-        const isProduction = environment === 'production';
+        const isProduction = environment === 'prod';
         const slackWebhookUrl = configService.get<string>('SLACK_WEBHOOK_URL');
 
         transports.push(ConsoleTransport.createColorize());

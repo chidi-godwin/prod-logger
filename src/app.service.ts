@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import Logger, { LoggerKey } from './logger/interfaces/logger.interface';
 
 type Cat = { id: number; name: string };
 
@@ -6,7 +7,7 @@ type Cat = { id: number; name: string };
 export class AppService {
   private readonly cats: Cat[];
 
-  constructor() {
+  constructor(@Inject(LoggerKey) private readonly logger: Logger) {
     this.cats = [
       {
         id: 1,
@@ -28,6 +29,8 @@ export class AppService {
   }
 
   findAll(): Cat[] {
+    this.logger.info('returning all cats');
+    this.logger.debug('cats', { data: this.cats });
     return this.cats;
   }
 }

@@ -14,5 +14,5 @@ export interface LogData {
   sourceClass?: string; // Classname of the source
   correlationId?: string; // Correlation ID
   error?: Error; // Error object
-  props?: NodeJS.Dict<any>; // Additional custom properties
+  data?: NodeJS.Dict<any>; // Additional custom properties
 }
