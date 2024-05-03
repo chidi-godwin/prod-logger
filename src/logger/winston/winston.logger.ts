@@ -2,7 +2,7 @@ import * as winston from 'winston';
 import { Inject, Injectable } from '@nestjs/common';
 import Logger from '../interfaces/logger.interface';
 import { LogLevel } from '../enums/level.enum';
-import { LogData } from '../interfaces/log.interface';
+import { LogProperties } from '../interfaces/log.interface';
 
 export const WinstonLoggerTransportsKey = Symbol();
 
@@ -51,8 +51,8 @@ export default class WinstonLogger implements Logger {
         })(),
         // Add custom fields to the data property
         winston.format.metadata({
-          key: 'data',
-          fillExcept: ['timestamp', 'level', 'message'],
+          key: 'prop',
+          fillExcept: ['timestamp', 'level', 'message', 'data', 'error'],
         }),
         // Format the log as JSON
         winston.format.json(),
@@ -66,14 +66,16 @@ export default class WinstonLogger implements Logger {
   public log(
     level: LogLevel,
     message: string | Error,
-    data?: LogData,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
     profile?: string,
   ) {
     const logData = {
       level: level,
       message: message instanceof Error ? message.message : message,
       error: message instanceof Error ? message : undefined,
-      ...data,
+      data,
+      ...prop,
     };
 
     if (profile) {
@@ -83,28 +85,58 @@ export default class WinstonLogger implements Logger {
     }
   }
 
-  public debug(message: string, data?: LogData, profile?: string) {
-    this.log(LogLevel.Debug, message, data, profile);
+  public debug(
+    message: string,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    this.log(LogLevel.Debug, message, data, prop, profile);
   }
 
-  public info(message: string, data?: LogData, profile?: string) {
-    this.log(LogLevel.Info, message, data, profile);
+  public info(
+    message: string,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    this.log(LogLevel.Info, message, data, prop, profile);
   }
 
-  public warn(message: string | Error, data?: LogData, profile?: string) {
-    this.log(LogLevel.Warn, message, data, profile);
+  public warn(
+    message: string | Error,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    this.log(LogLevel.Warn, message, data, prop, profile);
   }
 
-  public error(message: string | Error, data?: LogData, profile?: string) {
-    this.log(LogLevel.Error, message, data, profile);
+  public error(
+    message: string | Error,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    this.log(LogLevel.Error, message, data, prop, profile);
   }
 
-  public fatal(message: string | Error, data?: LogData, profile?: string) {
-    this.log(LogLevel.Fatal, message, data, profile);
+  public fatal(
+    message: string | Error,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    this.log(LogLevel.Fatal, message, data, prop, profile);
   }
 
-  public emergency(message: string | Error, data?: LogData, profile?: string) {
-    this.log(LogLevel.Emergency, message, data, profile);
+  public emergency(
+    message: string | Error,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    this.log(LogLevel.Emergency, message, data, prop, profile);
   }
 
   public startProfile(id: string) {

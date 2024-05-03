@@ -6,8 +6,9 @@ type Cat = { id: number; name: string };
 @Injectable()
 export class AppService {
   private readonly cats: Cat[];
+  @Inject(LoggerKey) private readonly logger: Logger;
 
-  constructor(@Inject(LoggerKey) private readonly logger: Logger) {
+  constructor() {
     this.cats = [
       {
         id: 1,

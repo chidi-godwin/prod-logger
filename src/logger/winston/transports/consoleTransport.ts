@@ -17,28 +17,26 @@ export default class ConsoleTransport {
       format: winston.format.combine(
         winston.format.printf((log) => {
           const color = this.mapLogLevelColor(log.level as LogLevel);
-          const prefix = `${log.data.label ? `[${log.data.label}]` : ''}`;
+          const prefix = `${log.prop.label ? `[${log.prop.label}]` : ''}`;
           return `${this.colorize(color, prefix + '  -')} ${log.timestamp}    ${
-            log.data.correlationId
-              ? `(${this.colorize(LogColors.cyan, log.data.correlationId)})`
+            log.prop.correlationId
+              ? `(${this.colorize(LogColors.cyan, log.prop.correlationId)})`
               : ''
           } ${this.colorize(color, log.level.toUpperCase())} ${
-            log.data.sourceClass
-              ? `${this.colorize(LogColors.cyan, `[${log.data.sourceClass}]`)}`
+            log.prop.sourceClass
+              ? `${this.colorize(LogColors.cyan, `[${log.prop.sourceClass}]`)}`
               : ''
           } ${this.colorize(
             color,
-            log.message + ' - ' + (log.data.error ? log.data.error : ''),
+            log.message + ' - ' + (log.error ? log.error : ''),
           )}${
-            log.data.durationMs !== undefined
-              ? this.colorize(color, ' +' + log.data.durationMs + 'ms')
+            log.prop.durationMs !== undefined
+              ? this.colorize(color, ' +' + log.prop.durationMs + 'ms')
               : ''
           }${
-            log.data.stack ? this.colorize(color, `  - ${log.data.stack}`) : ''
+            log.prop.stack ? this.colorize(color, `  - ${log.prop.stack}`) : ''
           }${
-            log.data.data
-              ? `\n  - Data: ${JSON.stringify(log.data.data, null, 4)}`
-              : ''
+            log.data ? `\n  - Data: ${JSON.stringify(log.data, null, 4)}` : ''
           }`;
         }),
       ),

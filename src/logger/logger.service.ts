@@ -3,7 +3,7 @@ import { INQUIRER } from '@nestjs/core';
 import Logger, { LoggerBaseKey } from './interfaces/logger.interface';
 import { ConfigService } from '@nestjs/config';
 import { LogLevel } from './enums/level.enum';
-import { LogData } from './interfaces/log.interface';
+import { LogProperties } from './interfaces/log.interface';
 import { ContextStorageInterfaceKey } from 'src/logger/context/interfaces/context.interface';
 import { ContextStorageService } from 'src/logger/context/context.service';
 
@@ -33,45 +33,82 @@ export default class LoggerService implements Logger {
   public log(
     level: LogLevel,
     message: string | Error,
-    data?: LogData,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
     profile?: string,
   ) {
-    return this.logger.log(level, message, this.getLogData(data), profile);
+    return this.logger.log(
+      level,
+      message,
+      data,
+      this.getLogData(prop),
+      profile,
+    );
   }
 
-  public debug(message: string, data?: LogData, profile?: string) {
-    return this.logger.debug(message, this.getLogData(data), profile);
+  public debug(
+    message: string,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    return this.logger.debug(message, data, this.getLogData(prop), profile);
   }
 
-  public info(message: string, data?: LogData, profile?: string) {
-    return this.logger.info(message, this.getLogData(data), profile);
+  public info(
+    message: string,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    return this.logger.info(message, data, this.getLogData(prop), profile);
   }
 
-  public warn(message: string | Error, data?: LogData, profile?: string) {
-    return this.logger.warn(message, this.getLogData(data), profile);
+  public warn(
+    message: string | Error,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    return this.logger.warn(message, data, this.getLogData(prop), profile);
   }
 
-  public error(message: string | Error, data?: LogData, profile?: string) {
-    return this.logger.error(message, this.getLogData(data), profile);
+  public error(
+    message: string | Error,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    return this.logger.error(message, data, this.getLogData(prop), profile);
   }
 
-  public fatal(message: string | Error, data?: LogData, profile?: string) {
-    return this.logger.fatal(message, this.getLogData(data), profile);
+  public fatal(
+    message: string | Error,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    return this.logger.fatal(message, data, this.getLogData(prop), profile);
   }
 
-  public emergency(message: string | Error, data?: LogData, profile?: string) {
-    return this.logger.emergency(message, this.getLogData(data), profile);
+  public emergency(
+    message: string | Error,
+    data?: NodeJS.Dict<any>,
+    prop?: LogProperties,
+    profile?: string,
+  ) {
+    return this.logger.emergency(message, data, this.getLogData(prop), profile);
   }
 
-  private getLogData(data?: LogData): LogData {
+  private getLogData(prop?: LogProperties): LogProperties {
     return {
-      ...data,
-      organization: data?.organization || this.organization,
-      context: data?.context || this.context,
-      app: data?.app || this.app,
-      sourceClass: data?.sourceClass || this.sourceClass,
+      ...prop,
+      organization: prop?.organization || this.organization,
+      context: prop?.context || this.context,
+      app: prop?.app || this.app,
+      sourceClass: prop?.sourceClass || this.sourceClass,
       correlationId:
-        data?.correlationId || this.contextStorageService.getContextId(),
+        prop?.correlationId || this.contextStorageService.getContextId(),
     };
   }
 
